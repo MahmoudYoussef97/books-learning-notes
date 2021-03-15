@@ -1,4 +1,4 @@
-# books-learning-notes
+# Chapter 1 - Meet Kafka
 Data really powers everything that we do. ---Jeff Weiner, CEO of LinkedIn
 
 Kafka is like a messaging system in that it lets you publish and subscribe to streams of messages. In this way, it is similar to products like ActiveMQ, RabbitMQ, IBM's MQSeries, and other products. But even with these similarities, Kafka has a number of core differences from traditional messaging systems that make it another kind of animal entirely.
