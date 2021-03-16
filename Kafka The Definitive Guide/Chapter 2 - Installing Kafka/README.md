@@ -1,3 +1,5 @@
+# Chapter 2 - Installing Kafka
+
 ## Choosing an Operating System
 
 Apache Kafka is a Java application, and can run on many operating systems. This includes Windows, MacOS, Linux, and others.
@@ -57,16 +59,20 @@ The example configuration provided with the Kafka distribution is sufficient to 
 ## General Broker
 
 There are several broker configurations that should be reviewed when deploying Kafka for any environment other than a standalone broker on a single server.
+
 **broker.id**
+
 Every Kafka broker must have an integer identifier, which is set using the broker.id configuration. By default, this integer is set to 0, but it can be any value.
 The most important thing is that the integer must be unique within a single Kafka cluster.
 A good guideline is to set this value to something intrinsic to the host so that when performing maintenance it is not onerous to map broker ID numbers to hosts.
 
 **port**
+
 The example configuration file starts Kafka with a listener on TCP port 9092. This can be set to any available port by changing the port configuration parameter. Keep
 in mind that if a port lower than 1024 is chosen, Kafka must be started as root.
 
 **zookeeper.connect**
+
 The location of the Zookeeper used for storing the broker metadata is set using the zookeeper.connect configuration parameter.
 
 - hostname, the hostname or IP address of the Zookeeper server.
@@ -74,10 +80,12 @@ The location of the Zookeeper used for storing the broker metadata is set using 
 - /path, an optional Zookeeper path to use as a chroot environment for the Kafka cluster. If it is omitted, the root path is used. If a chroot path is specified and does not exist, it will be created by the broker when it starts up.
 
 **log.dirs**
+
 Kafka persists all messages to disk, and these log segments are stored in the directories specified in the log.dirs configuration. This is a comma-separated list of paths on the local system.
 If more than one path is specified, the broker will store partitions on them in a “least-used” fashion with one partition’s log segments stored within the same path.
 
 **num.recovery.threads.per.data.dir**
+
 Kafka uses a configurable pool of threads for handling log segments. Currently, this thread pool is used:
 - When starting normally, to open each partition’s log segments
 - When starting after a failure, to check and truncate each partition’s log segments
@@ -87,6 +95,7 @@ By default, only one thread per log directory is used.
 This means that if num.recovery.threads.per.data.dir is set to 8, and there are 3 paths specified in log.dirs, this is a total of 24 threads.
 
 **auto.create.topics.enable**
+
 The default Kafka configuration specifies that the broker should automatically create a topic under the following circumstances:
 - When a producer starts writing messages to the topic
 - When a consumer starts reading messages from the topic
@@ -122,22 +131,27 @@ leader elections.
 if I want to be able to write and read 1 GB/sec from a topic, and I know each consumer can only process 50 MB/s, then I know I need at least 20 partitions. This way, I can have 20 consumers reading from the topic and achieve 1 GB/sec.
 
 **log.retention.ms**
+
 The most common configuration for how long Kafka will retain messages is by time. The default is specified in the configuration file using the log.retention.hours
 parameter, and it is set to 168 hours, or one week.
 The recommended parameter to use is log.retention.ms, as the smaller unit size will take precedence if more than one is specified.
 
 **log.retention.bytes**
+
 Another way to expire messages is based on the total number of bytes of messages retained.
 
 This value is set using the log.retention.bytes parameter, and it is applied per-partition. This means that if you have a topic with 8 partitions, and log.retention.bytes is set to 1 GB, the amount of data retained for the topic will be 8 GB at most.
 
 **log.segment.bytes**
+
 Once the log segment has reached the size specified by the log.segment.bytes parameter, which defaults to 1 GB, the log segment is closed and a new one is opened. Once a log segment has been closed, it can be considered for expiration.
 
 **log.segment.ms**
+
 Another way to control when log segments are closed is by using the [log.segment.ms](http://log.segment.ms/) parameter
 
 **message.max.bytes**
+
 The Kafka broker limits the maximum size of a message that can be produced, configured by the message.max.bytes parameter, which defaults to 1000000, or 1 MB. A producer that tries to send a message larger than this will receive an error back from the broker.
 This configuration deals with compressed message size, which means that producers can send messages that are much larger than this value uncompressed
 
